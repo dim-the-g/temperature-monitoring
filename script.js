@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function fetchTemperature() {
-    fetch('http://localhost:3000/getTemperatures')  // Αυτό είναι το URL του backend
+    fetch('http://192.168.1.5:3001/getTemperatures')  // Αυτό είναι το URL του backend
         .then(response => response.json())
         .then(data => {
             let output = "";
