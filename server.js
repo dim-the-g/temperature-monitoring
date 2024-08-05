@@ -20,6 +20,7 @@ app.get('/getTemperatures', (req, res) => {
     res.json(temperatureData);
 });
 
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
