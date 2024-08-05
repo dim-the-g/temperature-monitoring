@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function fetchTemperature() {
     fetch('http://192.168.1.5:3001/getTemperatures')  // Αυτό είναι το URL του backend
         .then(response => response.json())
-        .then(data => {
+        .then(data => { 
             let output = "";
             data.forEach(reading => {
-                output += `<p>${reading.timestamp}: ${reading.value} °C</p>`;
+                output += `<p>${reading.timestamp}: ${reading.temperature} °C</p>`;
             });
             document.getElementById('temperature').innerHTML = output;
         })

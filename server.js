@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');  // Προσθήκη του cors
 const app = express();
 const port = 3001;
 
@@ -7,6 +8,7 @@ let temperatureData = [];
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());  // Χρήση του cors
 
 app.post('/data', (req, res) => {
     const { temperature } = req.body;
