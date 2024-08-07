@@ -28,7 +28,7 @@ app.post('/data', async (req, res) => {
     const timestamp = new Date().toISOString();
 
     const newTemperature = new Temperature({
-        temperature,
+        temperature: parseFloat(temperature),  // Μετατροπή σε αριθμό
         timestamp
     });
 
