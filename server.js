@@ -6,7 +6,7 @@ const app = express();
 const port = 3001;
 
 // Σύνδεση με τη βάση δεδομένων MongoDB Atlas
-mongoose.connect('mongodb+srv://dimkuritshs:Jimkiritsis1#@cluster0.ihfid.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://dimkuritshs:jimkiritsis123@cluster0.ihfid.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Ορισμός σχήματος για τα δεδομένα θερμοκρασίας
 const temperatureSchema = new mongoose.Schema({
