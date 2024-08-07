@@ -1,65 +1,65 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const cors = require('cors');
-
-// Δημιουργία της εφαρμογής Express
+const mongoose = require('mongoose');
 const app = express();
 const port = 3001;
 
-// Ρύθμιση του Mongoose για τη σύνδεση στη βάση δεδομένων MongoDB
-mongoose.connect('mongodb://localhost/temperature_monitoring', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+// Σύνδεση με τη βάση δεδομένων MongoDB Atlas
+mongoose.connect('mongodb+srv://dimkuritshs:jimkiritsis123@cluster0.ihfid.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
-// Δημιουργία του Schema και του Model για την αποθήκευση θερμοκρασίας
+// Ορισμός σχήματος για τα δεδομένα θερμοκρασίας
 const temperatureSchema = new mongoose.Schema({
-  temperature: Number,
-  timestamp: String
+    temperature: Number,
+    timestamp: String
 });
 
 const Temperature = mongoose.model('Temperature', temperatureSchema);
 
-// Ρύθμιση του body-parser και του CORS
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-// Δημιουργία του route για την αποστολή δεδομένων
 app.post('/data', async (req, res) => {
-  const { temperature } = req.body;
-
-  // Ελέγξτε αν η θερμοκρασία είναι αριθμός
-  const numericTemperature = parseFloat(temperature);
-
-  if (isNaN(numericTemperature)) {
-    console.error('Invalid temperature value:', temperature);
-    return res.status(400).send('Invalid temperature value');
-  }
-
-  const timestamp = new Date().toISOString();
-
-  const newTemperature = new Temperature({
-    temperature: numericTemperature,
-    timestamp
+    const { temperature } = req.body;
+    console.log('Received data:', req.body);
+  
+    const numericTemperature = parseFloat(temperature);
+    if (isNaN(numericTemperature)) {
+      console.error('Invalid temperature value:', temperature);
+      return res.status(400).send('Invalid temperature value');
+    }
+  
+    const timestamp = new Date().toISOString();
+    const newTemperature = new Temperature({
+      temperature: numericTemperature,
+      timestamp
+    });
+  
+    try {
+      await newTemperature.save();
+      console.log(`Data saved: ${numericTemperature} °C at ${timestamp}`);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error('Error saving data:', err);
+      res.sendStatus(500);
+    }
   });
+  
 
-  try {
-    await newTemperature.save();
-    console.log(`Received data: ${numericTemperature} °C at ${timestamp}`);
-    res.sendStatus(200);
-  } catch (err) {
-    res.sendStatus(500);
-    console.error(err);
-  }
+app.get('/getTemperatures', async (req, res) => {
+    try {
+        const temperatures = await Temperature.find({});
+        res.json(temperatures);
+    } catch (err) {
+        res.sendStatus(500);
+        console.error(err);
+    }
 });
 
-// Προσθήκη route για την αρχική σελίδα
-app.get('/', (req, res) => {
-  res.send('Server is running!');
-});
-
-// Εκκίνηση του server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
