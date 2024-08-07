@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 function fetchTemperature() {
     console.log('Fetching temperature data...');
-    fetch('http://localhost:3001/getTemperatures')  // Αυτό είναι το URL του backend
+    fetch('https://9bab-62-103-52-119.ngrok-free.app/getTemperatures')
+  // Αυτό είναι το URL του backend
         .then(response => {
             console.log('Response received:', response);
             if (!response.ok) {
