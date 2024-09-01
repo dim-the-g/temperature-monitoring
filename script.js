@@ -8,7 +8,7 @@ function fetchTemperature() {
         .then(data => {
             let output = "";
             data.forEach(reading => {
-                output += `<p>${reading.timestamp}: ${reading.value} °C</p>`;
+                output += `<p>${reading.timestamp}: ${readingtemperature} °C</p>`;
             });
             document.getElementById('temperature').innerHTML = output;
         })
