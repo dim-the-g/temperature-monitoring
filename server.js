@@ -18,8 +18,14 @@ mongoose.connect(uri, {
 
 // Ορισμός του schema για την αποθήκευση των δεδομένων θερμοκρασίας
 const temperatureSchema = new mongoose.Schema({
-    temperature: Number,
-    timestamp: String,
+    temperature: {
+        type: Number,
+        required: true
+    },
+    timestamp: {
+        type: String,
+        required: true
+    },
 });
 
 const Temperature = mongoose.model('Temperature', temperatureSchema);
@@ -32,7 +38,10 @@ app.post('/data', async (req, res) => {
     const { temperature } = req.body;
     const timestamp = new Date().toISOString();
 
-    //
+    if (typeof temperature !== 'number') {
+        return res.status(400).json({ error: 'Invalid temperature value' });
+    }
+
     const newTemperature = new Temperature({
         temperature,
         timestamp,
@@ -45,7 +54,7 @@ app.post('/data', async (req, res) => {
         res.sendStatus(200);
     } catch (error) {
         console.error('Error saving temperature data:', error);
-        res.sendStatus(500); // Σφάλμα διακομιστή
+        res.status(500).json({ error: 'Error saving temperature data' }); // Βελτίωση σφάλματος
     }
 });
 
@@ -57,7 +66,7 @@ app.get('/getTemperatures', async (req, res) => {
         res.json(temperatures);
     } catch (error) {
         console.error('Error retrieving temperature data:', error);
-        res.sendStatus(500); // Σφάλμα διακομιστή
+        res.status(500).json({ error: 'Error retrieving temperature data' }); // Βελτίωση σφάλματος
     }
 });
 
