@@ -1,19 +1,24 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    fetchTemperature();
-});
-
-function fetchTemperature() {
-    fetch('http://192.168.1.5:3002/getTemperatures')  // Αυτό είναι το URL του backend
-        .then(response => response.json())
-        .then(data => {
-            let output = "";
-            data.forEach(reading => {
-                output += `<p>${reading.timestamp}: ${reading.temperature} °C</p>`;
+document.addEventListener("DOMContentLoaded", function() {
+    function fetchTemperature() {
+        fetch('http://localhost:3002/temperature')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('temperature').innerText = `Temperature: ${data.temperature} °C`;
+                document.getElementById('timestamp').innerText = `Timestamp: ${data.timestamp}`;
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                document.getElementById('temperature').innerText = 'Error fetching data';
+                document.getElementById('timestamp').innerText = '';
             });
-            document.getElementById('temperature').innerHTML = output;
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            document.getElementById('temperature').innerHTML = `<p>Error fetching data</p>`;
-        });
-}
+    }
+
+    // Fetch temperature every 10 seconds
+    setInterval(fetchTemperature, 10000);
+    fetchTemperature();  // Initial fetch
+});
