@@ -60,15 +60,17 @@ app.post('/data', async (req, res) => {
 
 // Διαχείριση GET αιτήσεων για λήψη θερμοκρασιών
 app.get('/getTemperatures', async (req, res) => {
+    console.log('GET request received for /getTemperatures');
     try {
-        // Λήψη όλων των δεδομένων θερμοκρασίας από τη βάση δεδομένων
         const temperatures = await Temperature.find();
+        console.log('Temperatures retrieved:', temperatures);
         res.json(temperatures);
     } catch (error) {
         console.error('Error retrieving temperature data:', error);
-        res.status(500).json({ error: 'Error retrieving temperature data' }); // Βελτίωση σφάλματος
+        res.status(500).json({ error: 'Error retrieving temperature data' });
     }
 });
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
